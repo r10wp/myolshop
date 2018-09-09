@@ -13,10 +13,16 @@
     </head>
     <body>
         <div id="loginbox">
-          @if (Session::has('PesanAktivitas'))
+          @if (Session::has('PesanSukses'))
+            <div class="alert alert-success alert-block">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <strong>{!! session('PesanSukses') !!}</strong>
+            </div>
+          @endif
+          @if (Session::has('PesanError'))
             <div class="alert alert-error alert-block">
-            	<button type="button" class="close" data-dismiss="alert">×</button>
-              <strong>{!! session('PesanAktivitas') !!}</strong>
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <strong>{!! session('PesanError') !!}</strong>
             </div>
           @endif
             <form id="loginform" class="form-vertical" method="post" action="{{ url('admin')}}">

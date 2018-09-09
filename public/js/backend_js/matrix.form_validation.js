@@ -1,12 +1,32 @@
 
 $(document).ready(function(){
 
+	$("#current_pwd").keyup(function(){
+		var current_pwd = $("#current_pwd").val();
+		$.ajax({
+			type: 'get',
+			url: '/admin/check-pwd',
+			data: {current_pwd:current_pwd},
+			success:function(resp){
+				// alert(resp);
+				if (resp=="false") {
+					$("#chkPwd").html("<font color='red'>Current Password is Incorect</font>");
+				}else if(resp=="true"){
+					$("#chkPwd").html("<font color='green'>Current Password is Corect</font>");
+				}
+//
+			},error:function(){
+				//alert("Error");
+			}
+		});
+	});
+
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
 	$('select').select2();
 
 	// Form Validation
-    $("#basic_validate").validate({
+  $("#basic_validate").validate({
 		rules:{
 			required:{
 				required:true
@@ -33,6 +53,59 @@ $(document).ready(function(){
 			$(element).parents('.control-group').removeClass('error');
 			$(element).parents('.control-group').addClass('success');
 		}
+	});
+
+	$("#add_category").validate({
+		rules:{
+			category_name:{
+				required:true,
+			},
+			description:{
+				required:true,
+			},
+			url:{
+				required:true,
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+
+	$("#edit_category").validate({
+		rules:{
+			category_name:{
+				required:true,
+			},
+			description:{
+				required:true,
+			},
+			url:{
+				required:true,
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+
+	$('.delCat').click(function(){
+		if(confirm('Apakah kategori ini akan dihapus?')){
+			return true;
+		}
+		return false;
 	});
 
 	$("#number_validate").validate({
