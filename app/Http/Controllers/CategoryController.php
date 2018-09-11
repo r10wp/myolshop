@@ -13,12 +13,16 @@ class CategoryController extends Controller
         $data = $request->all();
         $category = new Category;
         $category->name = $data['category_name'];
+        $category->parent_id = $data['parent_id'];
         $category->description = $data['description'];
         $category->url = $data['url'];
         $category->save();
+
         return redirect('/admin/view-categories')->with('PesanSukses','Kategori Berhasil Ditambah');
       }
-      return view('admin.categories.add_category');
+
+      $levels = Category::where(['parent_id'=>0])->get();
+      return view('admin.categories.add_category')->with(compact('levels'));
     }
 
     public function editCategory(Request $request, $id = null)
@@ -27,13 +31,15 @@ class CategoryController extends Controller
         $data = $request->all();
         Category::where(['id'=>$id])->update([
           'name'=>$data['category_name'],
+          'parent_id'=>$data['parent_id'],
           'description'=>$data['description'],
           'url'=>$data['url'],
         ]);
         return redirect('/admin/view-categories')->with('PesanSukses','Kategori Berhasil Diubah');
       }
       $categoryDetails = Category::where(['id'=>$id])->first();
-      return view('admin.categories.edit_category')->with(compact('categoryDetails'));
+      $levels = Category::where(['parent_id'=>0])->get();
+      return view('admin.categories.edit_category')->with(compact('categoryDetails','levels'));
     }
 
     public function deleteCategory($id = null)

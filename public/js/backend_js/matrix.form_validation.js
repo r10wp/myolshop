@@ -55,6 +55,7 @@ $(document).ready(function(){
 		}
 	});
 
+	// ===============================CRUD Categoory============================================
 	$("#add_category").validate({
 		rules:{
 			category_name:{
@@ -107,6 +108,72 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+
+	// ===============================CRUD Products============================================
+	$("#add_product").validate({
+		rules:{
+			category_id:{
+				required:true,
+			},
+			product_name:{
+				required:true,
+			},
+			product_code:{
+				required:true,
+			},
+			product_color:{
+				required:true,
+			},
+			price:{
+				required:true,
+				number:true
+			},
+			image:{
+				required:true,
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+	//Edit Produk=============//
+	$("#edit_product").validate({
+		rules:{
+			category_id:{
+				required:true,
+			},
+			product_name:{
+				required:true,
+			},
+			product_code:{
+				required:true,
+			},
+			product_color:{
+				required:true,
+			},
+			price:{
+				required:true,
+				number:true
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+
+
 
 	$("#number_validate").validate({
 		rules:{
@@ -163,4 +230,27 @@ $(document).ready(function(){
 			$(element).parents('.control-group').addClass('success');
 		}
 	});
+
+	$(".deleteRecord").click(function(){
+		var id = $(this).attr('rel');
+		var deleteFunction = $(this).attr('rel1');
+		swal({
+			title: "Apakah anda yakin akan menghapus product ini?",
+			text: "Data Product tidak akan bisa dikembalikan",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Ya, Lanjukan Hapus',
+			cancelButtonText: 'Tidak, Batalkan',
+			confirmButtonClass: 'btn btn-success',
+			cancelButtonClass: 'btn btn-danger',
+			buttonStyling: false,
+			reverseButtons: true
+		},
+		function(){
+			window.location.href="/admin/"+deleteFunction+"/"+id;
+		});
+	});
+
 });

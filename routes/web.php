@@ -29,10 +29,18 @@ Route::group(['middleware'=>['auth']], function(){
   Route::get('/admin/check-pwd', 'AdminController@chkPassword');
   Route::match(['get','post'] , '/admin/update-pwd', 'AdminController@updatePassword');
 
+  //Category and Sub Category
   Route::match(['get','post'],'/admin/add-category','CategoryController@addCategory');
   Route::match(['get','post'],'/admin/edit-category/{id}','CategoryController@editCategory');
-  Route::match(['get','post'],'/admin/delete-category/{id}','CategoryController@deleteCategory');
+  Route::get('/admin/delete-category/{id}','CategoryController@deleteCategory');
   Route::get('/admin/view-categories', 'CategoryController@viewCategories');
+
+  //Produks
+  Route::match(['get','post'],'/admin/add-product','ProductsController@addProduct');
+  Route::match(['get','post'],'/admin/edit-product/{id}','ProductsController@editProduct');
+  Route::get('/admin/delete-product/{id}' , 'ProductsController@deleteProduct');
+  Route::get('/admin/delete-product-image/{id}' , 'ProductsController@deleteProductImage');
+  Route::get('/admin/view-products', 'ProductsController@viewProducts');
 });
 
 

@@ -4,9 +4,9 @@
   <div id="content">
     <div id="content-header">
       <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom">
-        <i class="icon-home"></i> Home</a> <a href="#">Categories</a>
-        <a href="#" class="current">Add Category</a> </div>
-      <h1>Categories</h1>
+        <i class="icon-home"></i> Home</a> <a href="#">Products</a>
+        <a href="#" class="current">Add Product</a> </div>
+      <h1>Products</h1>
       @if (Session::has('PesanSukses'))
         <div class="alert alert-success alert-block">
           <button type="button" class="close" data-dismiss="alert">×</button>
@@ -28,24 +28,35 @@
               <h5>Add Category</h5>
             </div>
             <div class="widget-content nopadding">
-              <form class="form-horizontal" method="post" action="{{ url('admin/add-category')}}"
-                name="addCategory" id="add_category" novalidate="novalidate">
+              <form enctype="multipart/form-data" class="form-horizontal" method="post" action="{{ url('admin/add-product')}}"
+                name="addProduct" id="add_product" novalidate="novalidate">
                 {{ csrf_field() }}
+
+
                 <div class="control-group">
-                  <label class="control-label">Category Name</label>
+                  <label class="control-label">Under Category</label>
                   <div class="controls">
-                    <input type="text" name="category_name" id="category_name">
+                    <select name="category_id" style="width:220px">
+                      <?= $categories_dropdown?>
+                    </select>
                   </div>
                 </div>
                 <div class="control-group">
-                  <label class="control-label">Category Level</label>
+                  <label class="control-label">Product Name</label>
                   <div class="controls">
-                    <select name="parent_id" style="width:220px">
-                      <option value="0">Main Category</option>
-                      @foreach ($levels as $val)
-                        <option value="{{ $val->id}}">{{ $val->name}}</option>
-                      @endforeach
-                    </select>
+                    <input type="text" name="product_name" id="product_name">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">Product Code</label>
+                  <div class="controls">
+                    <input type="text" name="product_code" id="product_code">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">Product Color</label>
+                  <div class="controls">
+                    <input type="text" name="product_color" id="product_color">
                   </div>
                 </div>
                 <div class="control-group">
@@ -54,13 +65,20 @@
                     <textarea type="text" name="description" id="description"></textarea>
                   </div>
                 </div>
-
                 <div class="control-group">
-                  <label class="control-label">URL</label>
+                  <label class="control-label">Price</label>
                   <div class="controls">
-                    <input type="text" name="url" id="url">
+                    <input type="text" name="price" id="price">
                   </div>
                 </div>
+                <div class="control-group">
+                  <label class="control-label">Image</label>
+                  <div class="controls">
+                    <input type="file" name="image" id="image">
+                  </div>
+                </div>
+
+
                 <div class="form-actions">
                   <input type="submit" value="Add Category" class="btn btn-success">
                 </div>
