@@ -9,6 +9,7 @@ use Auth;
 use Image;
 use App\Category;
 use App\Product;
+use App\ProductsAttribute;
 
 class ProductsController extends Controller
 {
@@ -146,5 +147,39 @@ class ProductsController extends Controller
       $products[$key]->category_name = $category_name->name;
     }
     return view('admin.products.view_products')->with(compact('products'));
+  }
+
+  public function addAttribute(Request $request, $id = null)
+  {
+    $productDetails = Product::with('attributes')->where(['id'=>$id])->first();
+    if ($request->isMethod('post')) {
+      $data = $request->all();
+
+      foreach ($data['sku'] as $key => $val) {
+        if (!empty($val)) {
+          $attribute = new ProductsAttribute;
+          $attribute->product_id = $id;
+          $attribute->sku = $val;
+          $attribute->size = $data['size'][$key];
+          $attribute->price = $data['price'][$key];
+          $attribute->stock = $data['stock'][$key];
+          $attribute->save();
+        }
+      }
+      return redirect('admin/add-attribute/'.$id)->with('PesanSukses','Atribut dari Produk Berhasil ditambahkan');
+    }
+    return view('admin.products.add_attributes')->with(compact('productDetails'));
+  }
+
+  public function deleteAttribute($id = null)
+  {
+    ProductsAttribute::where(['id'=>$id])->delete();
+    return redirect()->back()->with('PesanSukses','Atribut Berhasil di hapus');
+  }
+
+  public function editAttribute($value='')
+  {
+
+
   }
 }

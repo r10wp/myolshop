@@ -61,7 +61,8 @@
                       </td>
                       <td class="center">
                         <a href="#myModal{{ $product->id }}" data-toggle="modal" class="btn btn-success btn-mini"> View </a>
-                        <a href="{{ url('/admin/edit-product/'.$product->id)}}" class="btn btn-primary btn-mini"> Edit </a>
+                        <a href="{{ url('/admin/edit-product/'.$product->id) }}" class="btn btn-primary btn-mini"> Edit </a>
+                        <a href="{{ url('/admin/add-attribute/'.$product->id) }}" class="btn btn-success btn-mini"> Add </a>
                         <a rel="{{ $product->id }}" rel1="delete-product" href="javascript:" class="deleteRecord btn btn-danger btn-mini"> Hapus </a>
                       </td>
                     </tr>
