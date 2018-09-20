@@ -102,9 +102,7 @@ class ProductsController extends Controller
 
     }
 
-
     $productDetails = Product::where(['id'=>$id])->first();
-
     $categories = Category::where(['parent_id'=>0])->get();
     $categories_dropdown = "<option selected disabled>Select</option>";
     foreach ($categories as $cat) {
@@ -130,12 +128,43 @@ class ProductsController extends Controller
 
   public function deleteProductImage($id = null)
   {
+    $productImage = Product::where(['id'=>$id])->first();
+    $large_image_path  = 'images/backend_images/products/large/';
+    $medium_image_path = 'images/backend_images/products/medium/';
+    $small_image_path  = 'images/backend_images/products/small/';
+
+    if (file_exists($large_image_path.$productImage->image)) {
+      unlink($large_image_path.$productImage->image);
+    }
+    if (file_exists($medium_image_path.$productImage->image)) {
+      unlink($medium_image_path.$productImage->image);
+    }
+    if (file_exists($small_image_path.$productImage->image)) {
+      unlink($small_image_path.$productImage->image);
+    }
+
     Product::where(['id'=>$id])->update(['image'=>'']);
     return redirect()->back()->with('PesanSukses','Gambar Berhasil Dihapus');
   }
 
   public function deleteProduct($id = null)
   {
+    $productImage = Product::where(['id'=>$id])->first();
+
+    $large_image_path  = 'images/backend_images/products/large/';
+    $medium_image_path = 'images/backend_images/products/medium/';
+    $small_image_path  = 'images/backend_images/products/small/';
+
+    if (file_exists($large_image_path.$productImage->image)) {
+      unlink($large_image_path.$productImage->image);
+    }
+    if (file_exists($medium_image_path.$productImage->image)) {
+      unlink($medium_image_path.$productImage->image);
+    }
+    if (file_exists($small_image_path.$productImage->image)) {
+      unlink($small_image_path.$productImage->image);
+    }
+
     Product::where(['id'=>$id])->delete();
     return redirect()->back()->with('PesanSukses','Product Berhasil Dihapus');
   }
@@ -177,9 +206,33 @@ class ProductsController extends Controller
     return redirect()->back()->with('PesanSukses','Atribut Berhasil di hapus');
   }
 
-  public function editAttribute($value='')
+  public function products($url =  null)
   {
+    $countCategory = Category::where(['url'=>$url,'status'=>1])->count();
+    if($countCategory == 0){
+      abort(404);
+    }
+    $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+    $categoryDetails = Category::where(['url' => $url])->first();
+    if ($categoryDetails->parent_id == 0) {
+      $subCategories = Category::where(['parent_id'=>$categoryDetails->id])->get();
+      foreach ($subCategories as $subcat) {
+        $cat_ids[] = $subcat->id;
+      }
+      $productsAll = Product::whereIn('category_id',$cat_ids)->get();
+    }else {
+      $productsAll = Product::where(['category_id'=>$categoryDetails->id])->get();
+    }
 
+    return view('products.listing')->with(compact('categoryDetails','productsAll','categories'));
 
   }
+
+  public function product($id = null)
+  {
+    $categories = Category::with('categories')->where(['parent_id'=>0])->get();
+    $productDetails = Product::where('id',$id)->first();
+    return view('products.detail')->with(compact('productDetails','categories'));
+  }
+
 }

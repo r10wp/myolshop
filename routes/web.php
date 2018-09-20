@@ -11,16 +11,23 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
+
+//Front End
+Route::get('/', 'IndexController@index');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/products/{url}','ProductsController@products');
+Route::get('/product/{id}','ProductsController@product');
 
 //Backend Admin
 Route::get('/admin', 'AdminController@login');
 Route::match(['get','post'],'/admin', 'AdminController@login');
 Route::get('/logout', 'AdminController@logout');
+
 
 
 Route::group(['middleware'=>['auth']], function(){
@@ -46,7 +53,3 @@ Route::group(['middleware'=>['auth']], function(){
   Route::match(['get','post'],'/admin/add-attribute/{id}','ProductsController@addAttribute');
   Route::get('/admin/delete-attribute/{id}' , 'ProductsController@deleteAttribute');
 });
-
-
-
-Route::get('/home', 'HomeController@index')->name('home');
